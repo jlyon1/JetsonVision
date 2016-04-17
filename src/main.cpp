@@ -5,7 +5,7 @@ using namespace cv;
 using namespace std;
 
 int main(int, char**){
-  VideoCapture cap("http://10.30.44.20/video.cgi?test.mjpg"); // Need to check the address
+  VideoCapture cap("http://10.30.44.20/axis-cgi/mjpeg/video.cgi?test=.mjpeg"); // Need to check the address
   Mat frame;
   namedWindow("Frame",1);
   while(true){
