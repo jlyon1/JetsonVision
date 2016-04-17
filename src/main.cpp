@@ -11,7 +11,6 @@ int main(int, char**){
   while(true){
     cap >> frame;
     imshow("Frame", frame);
-    waitkey(33);
 
   }
   return 0;
