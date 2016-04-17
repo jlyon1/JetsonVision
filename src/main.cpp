@@ -10,10 +10,8 @@ int main(int, char**){
 
   Mat frame;
   namedWindow("Frame",1);
-  frame = imread("pic1.png");
-  if(frame.size().width > 0){
-    imshow("Frame", frame);
-  }
+  frame = imread("./pic1.png");
+  imshow("Frame", frame);
   waitKey();
 
   return 0;
