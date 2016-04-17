@@ -14,6 +14,7 @@ int main(int, char**){
   if(frame.size().width > 0){
     imshow("Frame", frame);
   }
+  waitKey();
 
   return 0;
 
