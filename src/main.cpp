@@ -11,7 +11,7 @@ int main(int, char**){
   Mat frame;
   namedWindow("Frame",1);
   frame = imread("pic1.png");
-  if(frame.width > 0){
+  if(frame.size().width > 0){
     imshow("Frame", frame);
   }
 
