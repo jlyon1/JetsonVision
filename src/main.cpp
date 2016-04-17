@@ -12,6 +12,7 @@ int main(int, char**){
   namedWindow("Frame",1);
   frame = imread("./pic1.png");
   imshow("Frame", frame);
+  cout << "Running";
   waitKey();
 
   return 0;
