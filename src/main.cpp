@@ -13,7 +13,7 @@ int main(int, char**){
 
   while(true){
     cap >> Frame;
-    imshow("Frame", frame);
+    imshow("Frame", Frame);
     waitKey(10);
   }
 
