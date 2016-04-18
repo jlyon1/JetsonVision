@@ -42,7 +42,7 @@ int main(int, char**){
   Mat frame;
   int H_MIN,S_MIN,V_MIN;
   int H_MAX,S_MAX,V_MAX;
-  
+
   namedWindow("Frame",1);
   pthread_t imgThread;
   int id;
@@ -53,12 +53,11 @@ int main(int, char**){
         id = pthread_create(&imgThread,NULL,cameraBufferThread,(void *)"");
         pthread_detach(imgThread);
         readVarsFromFile(); //TODO create function
+        state = MAIN_LOOP;
       break;
     }
 
   }
-
-
 
   while(true){
 
