@@ -4,7 +4,7 @@
 #include <pthread.h>
 #include <iostream>
 #include <fstream>
-#include <String>
+#include <string>
 
 using namespace cv;
 using namespace std;
