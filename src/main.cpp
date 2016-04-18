@@ -48,7 +48,7 @@ bool readVarsFromFile(int* H_MIN, int* H_MAX, int* V_MIN, int* V_MAX, int* S_MIN
     while(std::getline(config,line)){
       switch(count){
         case 0:
-          (*H_MIN) = std::stoi(line);
+          (*H_MIN) = atoi(line.c_sr());
       }
       count += 1;
     }
