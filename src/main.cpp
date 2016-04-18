@@ -43,8 +43,8 @@ bool readVarsFromFile(){
   std::ofstream config;
   config.open("config.txt");
   std::string line;
-  if(myfile.is_open()){
-    while(getline(config,line)){
+  if(config.is_open()){
+    while(std::getline(config,line)){
       std::cout << line << std::endl;
     }
   }
