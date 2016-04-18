@@ -7,7 +7,7 @@
 using namespace cv;
 using namespace std;
 
-bool running = false;
+bool running = true;
 Mat imgArray [3] = {};
 long timeArray[3] = {};
 int i = 0;
@@ -28,21 +28,37 @@ void *cameraBufferThread(void* threadarg){
   }
 }
 
-void *processingThread(void* threadargs){
+int state =0;
+const int INIT = 0;
+const int CONNECTING = 1;
+const int LOOP = 2;
+
+bool readVarsFromFile(){
 
 }
 
 int main(int, char**){
   running = true;
   Mat frame;
-
+  int H_MIN,S_MIN,V_MIN;
+  int H_MAX,S_MAX,V_MAX;
+  
   namedWindow("Frame",1);
-
   pthread_t imgThread;
   int id;
 
-  id = pthread_create(&imgThread,NULL,cameraBufferThread,(void *)"");
-  pthread_detach(imgThread);
+  while(running){
+    switch(state){
+      case INIT:
+        id = pthread_create(&imgThread,NULL,cameraBufferThread,(void *)"");
+        pthread_detach(imgThread);
+        readVarsFromFile(); //TODO create function
+      break;
+    }
+
+  }
+
+
 
   while(true){
 
