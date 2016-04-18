@@ -40,7 +40,7 @@ void *cameraBufferThread(void* threadarg){
 }
 
 bool readVarsFromFile(){
-  std::ofstream config;
+  std::ifstream config;
   config.open("config.txt");
   std::string line;
   if(config.is_open()){
@@ -49,6 +49,7 @@ bool readVarsFromFile(){
     }
   }
   config.close();
+  return true;
 }
 
 int main(int argc, char* argv[]){
