@@ -43,7 +43,10 @@ bool readVarsFromFile(){
 
 }
 
-int main(int, char**){
+int main(int argc, char* argv[]){
+  if(argc > 1){
+    std::cout << "TOO MANY ARGUMENTS" << std::endl;
+  }
   running = true;
   Mat frame,HSV;
   int H_MIN,S_MIN,V_MIN;
@@ -59,18 +62,17 @@ int main(int, char**){
         std::cout << "Loading Data"<< std::endl;
         readVarsFromFile(); //TODO create function
         std::cout << "Done" << std::endl;
-        state = LOOP;
+        state = CONNECTING;
         std::cout <<"Connecting" << std::endl;
       break;
       case CONNECTING:
-        if(true){
+        if(cap.grab()){
           std::cout <<"Done" << std::endl;
           id = pthread_create(&imgThread,NULL,cameraBufferThread,(void *)"");
           pthread_detach(imgThread);
           state = LOOP;
         }
       case LOOP:
-
         if(imgArray[j].cols > 0){
           imgArray[j].copyTo(frame);
           cvtColor(frame, HSV, CV_BGR2HSV);
