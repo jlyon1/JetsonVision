@@ -106,12 +106,25 @@ int main(int argc, char* argv[]){
         }
       case LOOP:
         if(imgArray[j].cols > 0){
+          vector<vector<Point> > contours;
+          vector<Vec4i> hierarchy;
+
           imgArray[j].copyTo(frame);
           cvtColor(frame, HSV, CV_BGR2HSV);
+
           inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN),Scalar(H_MAX, S_MAX, V_MAX), threshold);
           erode(threshold,threshold,erodeElement);
           dilate(threshold,threshold,dilateElement);
-          imshow("Frame", threshold);
+
+          findContours( threshold, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+
+          for( int i = 0; i< contours.size(); i++ )
+          {
+            Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+            drawContours( frame, contours, i, color, 2, 8, hierarchy, 0, Point() );
+          }
+
+          imshow("Frame", frame);
           waitKey(10);
         }
       break;
