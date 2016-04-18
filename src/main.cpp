@@ -55,17 +55,18 @@ int main(int, char**){
         readVarsFromFile(); //TODO create function
         state = LOOP;
       break;
+      case LOOP:
+        if(imgArray[j].cols > 0){
+          imshow("Frame", imgArray[j]);
+          waitKey(10);
+        }
+      break;
     }
 
   }
 
   while(true){
 
-    if(imgArray[j].cols > 0){
-
-      imshow("Frame", imgArray[j]);
-      waitKey(10);
-    }
   }
 
   return 0;
