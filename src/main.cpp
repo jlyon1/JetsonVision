@@ -39,13 +39,18 @@ void *cameraBufferThread(void* threadarg){
   }
 }
 
-bool readVarsFromFile(){
+bool readVarsFromFile(int* H_MIN, int* H_MAX, int* V_MIN, int* V_MAX, int* S_MIN, int* S_MAX){
   std::ifstream config;
   config.open("config.txt");
   std::string line;
   if(config.is_open()){
+    int count = 0;
     while(std::getline(config,line)){
-      std::cout << line << std::endl;
+      switch(count){
+        case 0:
+          (*H_MIN) = std::stoi(line);
+      }
+      count += 1;
     }
   }
   config.close();
@@ -69,7 +74,7 @@ int main(int argc, char* argv[]){
     switch(state){
       case INIT:
         std::cout << "Loading Data"<< std::endl;
-        readVarsFromFile(); //TODO create function
+        readVarsFromFile(H_MIN,H_MAX,S_MIN,S_MAX,V_MIN,V_MAX); //TODO create function
         std::cout << "Done" << std::endl;
         state = CONNECTING;
         std::cout <<"Connecting" << std::endl;
