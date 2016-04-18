@@ -2,6 +2,7 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/imgproc/imgproc.hpp"
 #include <pthread.h>
+#include <iostream>
 
 using namespace cv;
 using namespace std;
@@ -11,13 +12,10 @@ Mat imgArray [3] = {};
 long timeArray[3] = {};
 int i = 0;
 int j = 2;
-
-VideoCapture cap;
+VideoCapture cap("http://10.30.44.20/mjpg/video.mjpg");
 
 void *cameraBufferThread(void* threadarg){
-
   while(running){
-
     cap >> imgArray[i];
     i ++;
     j ++;
@@ -30,22 +28,30 @@ void *cameraBufferThread(void* threadarg){
   }
 }
 
-int main(int, char**){
+void *processingThread(void* threadargs){
 
-  cap.open("http://10.30.44.20/mjpg/video.mjpg");
+}
+
+int main(int, char**){
+  running = true;
   Mat frame;
+
   namedWindow("Frame",1);
+
   pthread_t imgThread;
   int id;
-  id = pthread_create(&imgThread,NULL,cameraBufferThread,(void));
+
+  id = pthread_create(&imgThread,NULL,cameraBufferThread,(void *)"");
+  pthread_detach(imgThread);
 
   while(true){
-    if(imgArray[j] != NULL){
-      imshow("Frame", frame);
+
+    if(imgArray[j].cols > 0){
+
+      imshow("Frame", imgArray[j]);
       waitKey(10);
     }
   }
-
 
   return 0;
 
