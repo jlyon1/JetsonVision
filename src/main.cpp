@@ -132,10 +132,8 @@ int main(int argc, char* argv[]){
 
                 Rect midSeventyFive = Rect((int) (r.tl().x) + (int) (r.width * .25), (int) (r.tl().y), (int) (r.width * .5),(int) (r.height * .75));
                 Mat roi = image(midSeventyFive);
-
                 double count = 0;
                 roi = (roi == 0);
-
                 if (sumElems(roi) / r.area() > 75 && sumElems(roi) / r.area() < 250 && count < 150) {
                   rectangle(orig, r.tl(), r.br(), new Scalar(0, 255, 0));
                 }
