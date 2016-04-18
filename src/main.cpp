@@ -49,9 +49,9 @@ int main(int argc, char* argv[]){
   }else if(argc == 0){
     std::cout <<"using default config.txt" << std::endl;
   }else{
-    std::count << "using " << argv[0] << std::endl;
+    std::count << argv[0] << std::endl;
   }
-  
+
   running = true;
   Mat frame,HSV;
   int H_MIN,S_MIN,V_MIN;
