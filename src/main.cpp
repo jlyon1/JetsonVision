@@ -136,8 +136,7 @@ int main(int argc, char* argv[]){
                 threshold.copyTo(tmp2);
                   double count = 0;
                   for (int j = midSeventyFive.x; j < midSeventyFive.x + midSeventyFive.size().width; j++) {
-                    for (int k = midSeventyFive.y; k < midSeventyFive.y
-                      + midSeventyFive.size().height; k++) {
+                    for (int k = midSeventyFive.y; k < midSeventyFive.y + midSeventyFive.size().height; k++) {
 
                         if (tmp2.get(k, j)[0] == 255) {
                           tmp2.put(k, j, 0);
