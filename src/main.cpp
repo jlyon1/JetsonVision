@@ -74,7 +74,7 @@ int main(int argc, char* argv[]){
     switch(state){
       case INIT:
         std::cout << "Loading Data"<< std::endl;
-        readVarsFromFile(H_MIN,H_MAX,S_MIN,S_MAX,V_MIN,V_MAX); //TODO create function
+        readVarsFromFile(&H_MIN,&H_MAX,&S_MIN,&S_MAX,&V_MIN,&V_MAX); //TODO create function
         std::cout << "Done" << std::endl;
         state = CONNECTING;
         std::cout <<"Connecting" << std::endl;
