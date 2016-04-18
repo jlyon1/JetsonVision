@@ -3,6 +3,8 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include <pthread.h>
 #include <iostream>
+#include <fstream>
+#include <String>
 
 using namespace cv;
 using namespace std;
@@ -37,20 +39,21 @@ void *cameraBufferThread(void* threadarg){
   }
 }
 
-
-
 bool readVarsFromFile(){
-
+  std::ofstream config;
+  config.open("config.txt");
+  std::string line;
+  if(myfile.is_open()){
+    while(getline(config,line)){
+      std::cout << line << std::endl;
+    }
+  }
+  config.close();
 }
 
 int main(int argc, char* argv[]){
-  if(argc > 1){
-    std::cout << "TOO MANY ARGUMENTS" << std::endl;
-  }else if(argc == 0){
-    std::cout <<"using default config.txt" << std::endl;
-  }else{
-    std::count << argv[0] << std::endl;
-  }
+
+  std::cout <<"using default config.txt" << std::endl;
 
   running = true;
   Mat frame,HSV;
