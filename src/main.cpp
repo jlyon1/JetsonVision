@@ -49,6 +49,22 @@ bool readVarsFromFile(int* H_MIN, int* H_MAX, int* V_MIN, int* V_MAX, int* S_MIN
       switch(count){
         case 0:
           (*H_MIN) = atoi(line.c_str());
+          break;
+        case 1:
+          (*H_MAX) = atoi(line.c_str());
+          break;
+        case 2:
+          (*S_MIN) = atoi(line.c_str());
+          break;
+        case 3:
+          (*S_MAX) = atoi(line.c_str());
+          break;
+        case 4:
+          (*V_MIN) = atoi(line.c_str());
+          break;
+        case 5:
+          (*V_MAX) = atoi(line.c_str());
+          break;
       }
       count += 1;
     }
@@ -62,7 +78,7 @@ int main(int argc, char* argv[]){
   std::cout <<"using default config.txt" << std::endl;
 
   running = true;
-  Mat frame,HSV;
+  Mat frame,HSV,threshold;
   int H_MIN,S_MIN,V_MIN;
   int H_MAX,S_MAX,V_MAX;
 
@@ -76,7 +92,6 @@ int main(int argc, char* argv[]){
         std::cout << "Loading Data"<< std::endl;
         readVarsFromFile(&H_MIN,&H_MAX,&S_MIN,&S_MAX,&V_MIN,&V_MAX); //TODO create function
         std::cout << "Done" << std::endl;
-        std::cout << H_MIN << std::endl;
         state = CONNECTING;
         std::cout <<"Connecting" << std::endl;
       break;
@@ -91,8 +106,8 @@ int main(int argc, char* argv[]){
         if(imgArray[j].cols > 0){
           imgArray[j].copyTo(frame);
           cvtColor(frame, HSV, CV_BGR2HSV);
-
-          imshow("Frame", HSV);
+          inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN),Scalar(h_MAX, S_MAX, V_MAX), threshold);
+          imshow("Frame", threshold);
           waitKey(10);
         }
       break;
