@@ -124,7 +124,7 @@ int main(int argc, char* argv[]){
             drawContours( frame, contours, i, color, 2, 8, hierarchy, 0, Point() );
           }
 
-          imshow("Frame", frame);
+          imshow("Frame", imgArray[j]);
           waitKey(10);
         }
       break;
