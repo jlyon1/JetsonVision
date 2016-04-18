@@ -79,6 +79,8 @@ int main(int argc, char* argv[]){
 
   running = true;
   Mat frame,HSV,threshold;
+  Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));
+  Mat dilateElement = getStructuringElement( MORPH_RECT,Size(5,5));
   int H_MIN,S_MIN,V_MIN;
   int H_MAX,S_MAX,V_MAX;
 
@@ -107,6 +109,8 @@ int main(int argc, char* argv[]){
           imgArray[j].copyTo(frame);
           cvtColor(frame, HSV, CV_BGR2HSV);
           inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN),Scalar(H_MAX, S_MAX, V_MAX), threshold);
+          erode(threshold,threshold,erodeElement);
+          dilate(threshold,threshold,dilateElement);
           imshow("Frame", threshold);
           waitKey(10);
         }
