@@ -92,7 +92,7 @@ int main(int argc, char* argv[]){
     switch(state){
       case INIT:
         std::cout << "Loading Data"<< std::endl;
-        readVarsFromFile(&H_MIN,&H_MAX,&S_MIN,&S_MAX,&V_MIN,&V_MAX); //TODO create function
+        readVarsFromFile(&H_MIN,&H_MAX,&S_MIN,&S_MAX,&V_MIN,&V_MAX);
         std::cout << "Done" << std::endl;
         state = CONNECTING;
         std::cout <<"Connecting" << std::endl;
@@ -127,34 +127,20 @@ int main(int argc, char* argv[]){
           }
           for(int i = 0; i < boundRect.size(); i ++){
             Rect r = boundRect.get(i);
-            if(r.area() > 7000){
-
-            }else{
+            if((r.area() < 7000)){
               if (r.area() > 500 || (r.width / r.height > 2 && r.height < r.width)) {
 
-                Rect midSeventyFive((int) (r.tl().x) + (int) (r.width * .25), (int) (r.tl().y), (int) (r.width * .5),(int) (r.height * .75));
-                threshold.copyTo(tmp2);
-                  double count = 0;
-                  for (int j = midSeventyFive.x; j < midSeventyFive.x + midSeventyFive.size().width; j++) {
-                    for (int k = midSeventyFive.y; k < midSeventyFive.y + midSeventyFive.size().height; k++) {
+                Rect midSeventyFive = Rect((int) (r.tl().x) + (int) (r.width * .25), (int) (r.tl().y), (int) (r.width * .5),(int) (r.height * .75));
+                Mat roi = image(midSeventyFive);
 
-                        if (tmp2.get(k, j)[0] == 255) {
-                          tmp2.put(k, j, 0);
-                          count += 1;
-                        } else {
-                          tmp2.put(k, j, 255);
-                        }
-                      }
-                    }
-                    if (sumElems(tmp2.submat(r)) / r.area() > 75 && sumElems(tmp2.submat(r)) / r.area() < 250 && count < 150) {
-                      if (r.area() > 7000) {
+                double count = 0;
+                roi = (roi == 0);
 
-                      } else {
-                        rectangle(orig, r.tl(), r.br(), new Scalar(0, 255, 0));
-                      }
-                    }
-                  }
+                if (sumElems(roi) / r.area() > 75 && sumElems(roi) / r.area() < 250 && count < 150) {
+                  rectangle(orig, r.tl(), r.br(), new Scalar(0, 255, 0));
                 }
+              }
+            }
           }
 
           for( int i = 0; i< contours.size(); i++ )
