@@ -63,7 +63,7 @@ int main(int, char**){
         std::cout <<"Connecting" << std::endl;
       break;
       case CONNECTING:
-        if(cap.grab()){
+        if(cap.read(frame)){
           std::cout <<"Done" << std::endl;
           id = pthread_create(&imgThread,NULL,cameraBufferThread,(void *)"");
           pthread_detach(imgThread);
