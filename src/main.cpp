@@ -53,7 +53,7 @@ int main(int, char**){
         id = pthread_create(&imgThread,NULL,cameraBufferThread,(void *)"");
         pthread_detach(imgThread);
         readVarsFromFile(); //TODO create function
-        state = MAIN_LOOP;
+        state = LOOP;
       break;
     }
 
