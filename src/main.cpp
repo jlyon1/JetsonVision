@@ -11,8 +11,13 @@ Mat imgArray [3] = {};
 long timeArray[3] = {};
 int i = 0;
 int j = 2;
-void *runBuffer(VideoCapture c){
+
+VideoCapture cap;
+
+void *cameraBufferThread(void* threadarg){
+
   while(running){
+
     cap >> imgArray[i];
     i ++;
     j ++;
@@ -26,15 +31,19 @@ void *runBuffer(VideoCapture c){
 }
 
 int main(int, char**){
-  VideoCapture cap; // Need to check the address
+
   cap.open("http://10.30.44.20/mjpg/video.mjpg");
   Mat frame;
   namedWindow("Frame",1);
+  pthread_t imgThread;
+  int id;
+  id = pthread_create(&imgThread,NULL,cameraBufferThread,(void));
 
   while(true){
-    cap >> frame;
-    imshow("Frame", frame);
-    waitKey(10);
+    if(imgArray[j] != NULL){
+      imshow("Frame", frame);
+      waitKey(10);
+    }
   }
 
 
