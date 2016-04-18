@@ -78,7 +78,7 @@ int main(int argc, char* argv[]){
   std::cout <<"using default config.txt" << std::endl;
 
   running = true;
-  Mat frame,HSV,threshold;
+  Mat frame,HSV,threshold,tmp2;
   Mat erodeElement = getStructuringElement( MORPH_RECT,Size(3,3));
   Mat dilateElement = getStructuringElement( MORPH_RECT,Size(5,5));
   int H_MIN,S_MIN,V_MIN;
@@ -117,12 +117,54 @@ int main(int argc, char* argv[]){
           dilate(threshold,threshold,dilateElement);
 
           findContours( threshold, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+          vector<Rect> boundRect(contours.size());
+          int j = 0;
           for(int i = 0; i < contours.size(); i ++){
             approxPolyDP(Mat(contours[i]), contours[i], 2, true);
             if(contours[i].size() < 12 && contours[i].size() > 5){
-              //Add to rect arr
+              boundRect[j] = boundingRect( Mat(contours[i]) );
             }
           }
+          for(int i = 0; i < boundRect.size(); i ++){
+            Rect r = boundRect.get(i);
+            if(r.area() > 7000){
+
+            }else{
+              if (r.area() > 500 || (r.width / r.height > 2 && r.height < r.width)) {
+
+                Rect midSeventyFive((int)(r.tl().x) + (int)(r.width * .25), (int)(r.tl().y),(int)(r.height * .75));
+                tmp2 = threshold.submat(midSeventyFive);
+                  double count = 0;
+                  for (int j = midSeventyFive.x; j < midSeventyFive.x + midSeventyFive.size().width; j++) {
+                    for (int k = midSeventyFive.y; k < midSeventyFive.y
+                      + midSeventyFive.size().height; k++) {
+
+                        if (tmp2.get(k, j)[0] == 255) {
+                          tmp2.put(k, j, 0);
+                          count += 1;
+                        } else {
+                          tmp2.put(k, j, 255);
+
+                        }
+                      }
+                    }
+
+                    if (sumElems(tmp2.submat(r)) / r.area() > 75
+                    && sumElems(tmp2.submat(r)) / r.area() < 250 && count < 150) {
+                      if (r.area() > 7000) {
+
+                      } else {
+                        if (!largeBadRectangle.contains(r.tl())) {
+                          Imgproc.rectangle(orig, r.tl(), r.br(), new Scalar(0, 255, 0));
+                        }
+                      }
+
+                    }
+
+                  }
+                }
+          }
+
           for( int i = 0; i< contours.size(); i++ )
           {
             Scalar color = Scalar( 0, 255, 0);
@@ -133,6 +175,7 @@ int main(int argc, char* argv[]){
           waitKey(10);
         }
       break;
+
       case DISCONNECT:
         cap.release();
         running = false;
