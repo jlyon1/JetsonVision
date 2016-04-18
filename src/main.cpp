@@ -132,8 +132,8 @@ int main(int argc, char* argv[]){
             }else{
               if (r.area() > 500 || (r.width / r.height > 2 && r.height < r.width)) {
 
-                Rect midSeventyFive((int)(r.tl().x) + (int)(r.width * .25), (int)(r.tl().y),(int)(r.height * .75));
-                tmp2 = threshold.submat(midSeventyFive);
+                Rect midSeventyFive((int) (r.tl().x) + (int) (r.width * .25), (int) (r.tl().y), (int) (r.width * .5),(int) (r.height * .75));
+                threshold.copyTo(tmp2);
                   double count = 0;
                   for (int j = midSeventyFive.x; j < midSeventyFive.x + midSeventyFive.size().width; j++) {
                     for (int k = midSeventyFive.y; k < midSeventyFive.y
@@ -144,23 +144,16 @@ int main(int argc, char* argv[]){
                           count += 1;
                         } else {
                           tmp2.put(k, j, 255);
-
                         }
                       }
                     }
-
-                    if (sumElems(tmp2.submat(r)) / r.area() > 75
-                    && sumElems(tmp2.submat(r)) / r.area() < 250 && count < 150) {
+                    if (sumElems(tmp2.submat(r)) / r.area() > 75 && sumElems(tmp2.submat(r)) / r.area() < 250 && count < 150) {
                       if (r.area() > 7000) {
 
                       } else {
-                        if (!largeBadRectangle.contains(r.tl())) {
-                          Imgproc.rectangle(orig, r.tl(), r.br(), new Scalar(0, 255, 0));
-                        }
+                        rectangle(orig, r.tl(), r.br(), new Scalar(0, 255, 0));
                       }
-
                     }
-
                   }
                 }
           }
