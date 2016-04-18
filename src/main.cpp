@@ -8,10 +8,20 @@ using namespace std;
 
 bool running = false;
 Mat imgArray [3] = {};
-
+long timeArray[3] = {};
+int i = 0;
+int j = 2;
 void *runBuffer(VideoCapture c){
   while(running){
-
+    cap >> imgArray[i];
+    i ++;
+    j ++;
+    if(j > 2){
+      j = 0;
+    }
+    if(i > 2){
+      i = 0;
+    }
   }
 }
 
