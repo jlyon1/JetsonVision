@@ -117,7 +117,9 @@ int main(int argc, char* argv[]){
           dilate(threshold,threshold,dilateElement);
 
           findContours( threshold, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-
+          for(int i = 0; i < contours.size(); i ++){
+            approxPolyDP(Mat(contours[i]), contours[i], 2, true);
+          }
           for( int i = 0; i< contours.size(); i++ )
           {
             Scalar color = Scalar( 0, 255, 0);
