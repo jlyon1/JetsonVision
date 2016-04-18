@@ -14,9 +14,18 @@ int i = 0;
 int j = 2;
 VideoCapture cap("http://10.30.44.20/mjpg/video.mjpg");
 
+int state =0;
+const int INIT = 0;
+const int CONNECTING = 1;
+const int LOOP = 2;
+const int DISCONNECT = 3;
+
 void *cameraBufferThread(void* threadarg){
   while(running){
-    cap >> imgArray[i];
+    if(!cap.read(imgArray[j])){
+      state = DISCONNECT;
+      break;
+    };
     i ++;
     j ++;
     if(j > 2){
@@ -28,10 +37,7 @@ void *cameraBufferThread(void* threadarg){
   }
 }
 
-int state =0;
-const int INIT = 0;
-const int CONNECTING = 1;
-const int LOOP = 2;
+
 
 bool readVarsFromFile(){
 
@@ -56,6 +62,9 @@ int main(int, char**){
         state = LOOP;
       break;
       case LOOP:
+        if (cap.isOpened()) {
+
+        }
         if(imgArray[j].cols > 0){
           imshow("Frame", imgArray[j]);
           waitKey(10);
