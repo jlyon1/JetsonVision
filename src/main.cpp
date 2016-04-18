@@ -12,8 +12,8 @@ int main(int, char**){
   namedWindow("Frame",1);
 
   while(true){
-    cap >> Frame;
-    imshow("Frame", Frame);
+    cap >> frame;
+    imshow("Frame", frame);
     waitKey(10);
   }
 
