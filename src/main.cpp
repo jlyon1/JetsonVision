@@ -119,6 +119,9 @@ int main(int argc, char* argv[]){
           findContours( threshold, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
           for(int i = 0; i < contours.size(); i ++){
             approxPolyDP(Mat(contours[i]), contours[i], 2, true);
+            if(contours[i].size() < 12 && contours[i].size() > 5){
+              //Add to rect arr
+            }
           }
           for( int i = 0; i< contours.size(); i++ )
           {
