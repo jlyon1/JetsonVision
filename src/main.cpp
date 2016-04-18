@@ -106,7 +106,7 @@ int main(int argc, char* argv[]){
         if(imgArray[j].cols > 0){
           imgArray[j].copyTo(frame);
           cvtColor(frame, HSV, CV_BGR2HSV);
-          inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN),Scalar(h_MAX, S_MAX, V_MAX), threshold);
+          inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN),Scalar(H_MAX, S_MAX, V_MAX), threshold);
           imshow("Frame", threshold);
           waitKey(10);
         }
