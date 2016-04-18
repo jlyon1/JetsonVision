@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int, char**){
   VideoCapture cap; // Need to check the address
-  cap.open("http://10.30.44.20/mjpg/video.mjpg")
+  cap.open("http://10.30.44.20/mjpg/video.mjpg");
   Mat frame;
   namedWindow("Frame",1);
 
