@@ -45,7 +45,7 @@ bool readVarsFromFile(){
 
 int main(int, char**){
   running = true;
-  Mat frame;
+  Mat frame,HSV;
   int H_MIN,S_MIN,V_MIN;
   int H_MAX,S_MAX,V_MAX;
 
@@ -56,25 +56,34 @@ int main(int, char**){
   while(running){
     switch(state){
       case INIT:
-        id = pthread_create(&imgThread,NULL,cameraBufferThread,(void *)"");
-        pthread_detach(imgThread);
+        std::cout << "Loading Data"<< std::endl;
         readVarsFromFile(); //TODO create function
+        std::cout << "Done" << std::endl;
         state = LOOP;
+        std::cout <<"Connecting" << std::endl;
       break;
-      case LOOP:
-        if (cap.isOpened()) {
-
+      case CONNECTING:
+        if(cap.grab()){
+          std::cout <<"Done" << std::endl;
+          id = pthread_create(&imgThread,NULL,cameraBufferThread,(void *)"");
+          pthread_detach(imgThread);
+          state = LOOP;
         }
+      case LOOP:
+
         if(imgArray[j].cols > 0){
-          imshow("Frame", imgArray[j]);
+          imgArray[j].copyTo(frame);
+          cvtColor(frame, HSV, CV_BGR2HSV);
+
+          imshow("Frame", HSV);
           waitKey(10);
         }
       break;
+      case DISCONNECT:
+        cap.release();
+        running = false;
+      break;
     }
-
-  }
-
-  while(true){
 
   }
 
