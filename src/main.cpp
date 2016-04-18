@@ -120,7 +120,7 @@ int main(int argc, char* argv[]){
 
           for( int i = 0; i< contours.size(); i++ )
           {
-            Scalar color = Scalar( rng.uniform(0, 255), rng.uniform(0,255), rng.uniform(0,255) );
+            Scalar color = Scalar( 0, 255, 0);
             drawContours( frame, contours, i, color, 2, 8, hierarchy, 0, Point() );
           }
 
