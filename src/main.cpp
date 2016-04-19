@@ -128,8 +128,7 @@ int main(int argc, char* argv[]){
           for(int i = 0; i < boundRect.size(); i ++){
             Rect r = boundRect[i];
             if((r.area() < 7000)){
-              if (r.area() > 500 || (r.width / r.height > 2 && r.height < r.width)) {
-
+              if (r.area() > 500) {
                 Rect midSeventyFive = Rect((int) (r.tl().x) + (int) (r.width * .25), (int) (r.tl().y), (int) (r.width * .5),(int) (r.height * .75));
                 Mat roi = threshold(midSeventyFive);
                 double count = 0;
