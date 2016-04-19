@@ -125,6 +125,7 @@ int main(int argc, char* argv[]){
             approxPolyDP(Mat(contours[i]), contours[i], 2, true);
             if(contours[i].size() < 12 && contours[i].size() > 5){
               boundRect[j] = boundingRect( Mat(contours[i]) );
+              rectangle(frame,boundRect[j],Scalar(255,0,0));
             }
           }
           tmp2.copyTo(threshold);
@@ -146,7 +147,7 @@ int main(int argc, char* argv[]){
             drawContours( frame, contours, i, color, 2, 8, hierarchy, 0, Point() );
           }
 
-          imshow("Frame",threshold);
+          imshow("Frame",frame);
           waitKey(10);
         }
       break;
