@@ -140,7 +140,6 @@ int main(int argc, char* argv[]){
               }
             }
           }
-
           for( int i = 0; i< contours.size(); i++ )
           {
             Scalar color = Scalar( 0, 255, 0);
