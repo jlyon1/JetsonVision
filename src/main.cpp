@@ -85,6 +85,7 @@ int main(int argc, char* argv[]){
   int H_MAX,S_MAX,V_MAX;
 
   namedWindow("Frame",1);
+  namedWindow("threshold",2);
   pthread_t imgThread;
   int id;
 
@@ -116,7 +117,7 @@ int main(int argc, char* argv[]){
 
           erode(tmp2,threshold,erodeElement);
           dilate(tmp2,threshold,dilateElement);
-
+          imshow("threshold",tmp2);
           findContours( threshold, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
           vector<Rect> boundRect(contours.size());
           int j = 0;
