@@ -112,9 +112,10 @@ int main(int argc, char* argv[]){
           imgArray[j].copyTo(frame);
           cvtColor(frame, HSV, CV_BGR2HSV);
 
-          inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN),Scalar(H_MAX, S_MAX, V_MAX), threshold);
-          erode(threshold,threshold,erodeElement);
-          dilate(threshold,threshold,dilateElement);
+          inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN),Scalar(H_MAX, S_MAX, V_MAX), tmp2);
+
+          erode(tmp2,threshold,erodeElement);
+          dilate(tmp2,threshold,dilateElement);
 
           findContours( threshold, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
           vector<Rect> boundRect(contours.size());
@@ -125,6 +126,7 @@ int main(int argc, char* argv[]){
               boundRect[j] = boundingRect( Mat(contours[i]) );
             }
           }
+          tmp2.copyTo(threshold);
           for(int i = 0; i < boundRect.size(); i ++){
             Rect r = boundRect[i];
             if((r.area() < 7000)){
