@@ -136,7 +136,7 @@ int main(int argc, char* argv[]){
                 Rect midSeventyFive = Rect((int) (r.tl().x) + (int) (r.width * .25), (int) (r.tl().y), (int) (r.width * .5),(int) (r.height * .75));
                 Mat roi = threshold(midSeventyFive);
                 double count = 0;
-                roi = (roi == 0);
+
 
               }
             }
@@ -146,8 +146,8 @@ int main(int argc, char* argv[]){
             Scalar color = Scalar( 0, 255, 0);
             drawContours( frame, contours, i, color, 2, 8, hierarchy, 0, Point() );
           }
-
-          imshow("Frame",frame);
+          tmp2 = (tmp2 == 0);
+          imshow("Frame",tmp2);
           waitKey(10);
         }
       break;
