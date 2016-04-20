@@ -124,7 +124,7 @@ int main(int argc, char* argv[]){
           state = LOOP;
         }
       case LOOP:
-      
+
 	  val = getMilliCount();
       if(imgArray[j].data){
 
@@ -188,7 +188,7 @@ int main(int argc, char* argv[]){
         std::cout <<"No Data" << std::endl;
         waitKey(33);
       }
-      
+
       break;
 
       case DISCONNECT:
