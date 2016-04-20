@@ -5,6 +5,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <sys/timeb.h>
 
 using namespace cv;
 using namespace std;
@@ -22,8 +23,24 @@ const int CONNECTING = 1;
 const int LOOP = 2;
 const int DISCONNECT = 3;
 
+int getMilliCount(){
+	timeb tb;
+	ftime(&tb);
+	int nCount = tb.millitm + (tb.time & 0xfffff) * 1000;
+	return nCount;
+}
+
+int getMilliSpan(int nTimeStart){
+	int nSpan = getMilliCount() - nTimeStart;
+	if(nSpan < 0)
+		nSpan += 0x100000 * 1000;
+	return nSpan;
+}
+
 void *cameraBufferThread(void* threadarg){
+	int value;
   while(running){
+	value = getMilliCount();
     if(!cap.read(imgArray[j])){
       state = DISCONNECT;
       break;
@@ -36,6 +53,7 @@ void *cameraBufferThread(void* threadarg){
     if(i > 2){
       i = 0;
     }
+    cout << "---" <<getMilliSpan(value) << endl << "---" <<std::endl;
   }
 }
 
@@ -74,7 +92,7 @@ bool readVarsFromFile(int* H_MIN, int* H_MAX, int* V_MIN, int* V_MAX, int* S_MIN
 }
 
 int main(int argc, char* argv[]){
-
+	int val;
   std::cout <<"using default config.txt" << std::endl;
 
   running = true;
@@ -84,7 +102,7 @@ int main(int argc, char* argv[]){
   int H_MIN,S_MIN,V_MIN;
   int H_MAX,S_MAX,V_MAX;
 
-  namedWindow("Frame",1);
+  //namedWindow("Frame",1);
 
   pthread_t imgThread;
   int id;
@@ -106,50 +124,71 @@ int main(int argc, char* argv[]){
           state = LOOP;
         }
       case LOOP:
-        if(imgArray[j].cols > 0){
-          vector<vector<Point> > contours;
-          vector<Vec4i> hierarchy;
+      
+	  val = getMilliCount();
+      if(imgArray[j].data){
 
-          imgArray[j].copyTo(frame);
-          cvtColor(frame, HSV, CV_BGR2HSV);
+        vector<vector<Point> > contours;
+        vector<Vec4i> hierarchy;
 
-          inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN),Scalar(H_MAX, S_MAX, V_MAX), tmp2);
+        imgArray[j].copyTo(frame);
+        cvtColor(frame, HSV, CV_BGR2HSV);
 
-          erode(tmp2,threshold,erodeElement);
-          dilate(tmp2,threshold,dilateElement);
+        inRange(HSV, Scalar(H_MIN, S_MIN, V_MIN),Scalar(H_MAX, S_MAX, V_MAX), tmp2);
 
-          findContours( threshold, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-          vector<Rect> boundRect(contours.size());
-          int j = 0;
-          for(int i = 0; i < contours.size(); i ++){
-            approxPolyDP(Mat(contours[i]), contours[i], 2, true);
-            if(contours[i].size() < 12 && contours[i].size() > 5){
-              boundRect[j] = boundingRect( Mat(contours[i]) );
-              rectangle(frame,boundRect[j],Scalar(255,0,0));
-            }
+        erode(tmp2,threshold,erodeElement);
+        dilate(tmp2,threshold,dilateElement);
+
+        findContours( threshold, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+        vector<Rect> boundRect(contours.size());
+        int j = 0;
+        for(int i = 0; i < contours.size(); i ++){
+          approxPolyDP(Mat(contours[i]), contours[i], 2, true);
+          if(contours[i].size() < 12 && contours[i].size() > 6){
+            boundRect[j] = boundingRect( Mat(contours[i]) );
+            rectangle(frame,boundRect[j],Scalar(0,0,255));
           }
-          tmp2.copyTo(threshold);
-          for(int i = 0; i < boundRect.size(); i ++){
-            Rect r = boundRect[i];
-            if((r.area() < 7000)){
-              if (r.area() > 500 ) {
-                Rect midSeventyFive = Rect((int) (r.tl().x) + (int) (r.width * .25), (int) (r.tl().y), (int) (r.width * .5),(int) (r.height * .75));
-                Mat roi = threshold(midSeventyFive);
-                double count = 0;
-
-
+        }
+        tmp2.copyTo(threshold);
+        for(int i = 0; i < boundRect.size(); i ++){
+          Rect r = boundRect[i];
+          if((r.area() < 7000)){
+            if (r.area() > 500 ) {
+              Rect midSeventyFive = Rect((int) (r.tl().x) + (int) (r.width * .25), (int) (r.tl().y), (int) (r.width * .5),(int) (r.height * .75));
+              Mat roi = threshold(midSeventyFive);
+              Mat target = threshold(r);
+              double count = 0;
+              roi = (roi == 0);
+              double density = (sum(target)/r.area())[0];
+              if(!(density > 75 && density < 250) || (double)r.width / (double)r.height < 1){
+                std::cout << "Bad" << endl;
+                boundRect[i] = Rect(10,10,10,10);
               }
             }
           }
-          for( int i = 0; i< contours.size(); i++ )
-          {
-            Scalar color = Scalar( 0, 255, 0);
-            drawContours( frame, contours, i, color, 2, 8, hierarchy, 0, Point() );
-          }
-          tmp2 = (tmp2 == 0);
-          imshow("Frame",tmp2);
-          waitKey(10);
         }
+        for( int i = 0; i< contours.size(); i++ )
+        {
+          Scalar color = Scalar( 0, 255, 0);
+          drawContours( frame, contours, i, color, 2, 8, hierarchy, 0, Point() );
+        }
+        int maxid = 0;
+        for(int i = 0; i < boundRect.size(); i ++){
+          if(boundRect[maxid].area() < boundRect[i].area()){
+            maxid = i;
+          }
+
+        }
+
+        rectangle(frame,boundRect[maxid],Scalar(255,0,0));
+        //imshow("Frame",frame);
+        waitKey(33);
+        cout << getMilliSpan(val) << std::endl;
+      }else{
+        std::cout <<"No Data" << std::endl;
+        waitKey(33);
+      }
+      
       break;
 
       case DISCONNECT:
